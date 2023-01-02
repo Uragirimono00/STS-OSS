@@ -17,6 +17,7 @@ class voiceloop(threading.Thread):
 
             if voice != False and myThread.rflag == True:
                 print(voice)
+                speak(voice)
                 self.Pasting(voice)
 
             if myThread.rflag == False:
@@ -60,7 +61,6 @@ class voiceloop(threading.Thread):
                 print("could not understand audio")
                 return False
 
-            speak(voice_data)
             return str(voice_data)
 
 
