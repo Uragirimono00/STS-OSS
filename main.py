@@ -41,14 +41,14 @@ class voiceloop(threading.Thread):
                 listener.adjust_for_ambient_noise(raw_voice)
 
                 # adjust setting values
-                listener.dynamic_energy_adjustment_damping = 0.2
+                listener.dynamic_energy_adjustment_damping = 0.15
                 listener.pause_threshold = 0.6
                 listener.energy_threshold = 600
 
                 img_frm.config(image=mic1_img)
 
                 print("Say something!")
-                audio = listener.listen(raw_voice)
+                audio = listener.listen(raw_voice, 10, 5)
 
                 img_frm.config(image=mic2_img)
 
