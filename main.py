@@ -76,6 +76,8 @@ def speak(text):
     filename = './voice.mp3'
     tts.save(filename)
     playsound.playsound(filename)
+    if os.path.exists(filename):
+        os.remove(filename)
 
 
 root = Tk()
