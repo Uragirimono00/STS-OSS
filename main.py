@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from pynput.keyboard import Controller
 import os
@@ -5,6 +6,28 @@ import threading
 import speech_recognition as sr
 from gtts import gTTS
 import playsound
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
+type = 'Naver'
+
+base_url = 'https://papago.naver.com'
+chrome_options = Options()  # 브라우저 꺼짐 방지
+chrome_options.add_experimental_option("detach", True)
+chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])  # 불필요한 에러 메세지 삭제
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-san블랙팬서는 와칸다 아무튼 그리고 정신감정을 받던 중 갑자기 갑자기 dbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
+driver.set_window_size(1920, 1080)
+driver.implicitly_wait(10)
+
+driver.get(base_url)
 
 class voiceloop(threading.Thread):
     mykeyboard = Controller()
@@ -13,7 +36,6 @@ class voiceloop(threading.Thread):
         while True:
             voice = self.CollectVoice()
             if voice != False and myThread.rflag == True:
-                print(voice)
                 speak(voice)
                 self.Pasting(voice)
 
@@ -37,10 +59,10 @@ class voiceloop(threading.Thread):
                 print("조정중...")
 
                 # 설정
-                listener.adjust_for_ambient_noise(raw_voice, 5)
+                listener.adjust_for_ambient_noise(raw_voice, 2)
                 listener.dynamic_energy_adjustment_damping = 0.2
-                listener.pause_threshold = 0.6
-                listener.energy_threshold = 300
+                listener.pause_threshold = 0.8
+                listener.energy_threshold = 600
 
                 img_frm.config(image=mic1_img)
 
@@ -63,23 +85,34 @@ class voiceloop(threading.Thread):
 
 def on_closing():
     myThread.rflag = False
-    print("finish work")
+    print("종료되었습니다.")
     # myThread.join()
     os._exit(1)
 
-
 def speak(text):
-    tts = gTTS(text=text, lang='ko')
-    file_name = 'voice.mp3'
-    tts.save(file_name)
-    if os.path.exists(file_name):
-        try:
-            playsound.playsound(file_name)
-            os.remove(file_name)
-        except:
-            print("에러가 발생했습니다.")
-            pass
-    return
+    if type == "Google":
+        tts = gTTS(text=text, lang='ko')
+        file_name = 'voice.mp3'
+        tts.save(file_name)
+        if os.path.exists(file_name):
+            try:
+                playsound.playsound(file_name)
+                os.remove(file_name)
+            except:
+                print("에러가 발생했습니다.")
+                pass
+        return
+    if type == "Naver":
+        driver.find_element(By.XPATH, '//*[@id="txtSource"]').click()
+        driver.find_element(By.ID, "txtSource").clear()
+        driver.find_element(By.ID, "txtSource").send_keys(text)
+        time.sleep(1)
+        driver.find_element(By.XPATH, '//*[@class="btn_sound___2H-0Z"]').click()
+        time.sleep(3)
+        return
+    else:
+        print("타입 설정이 이상합니다.")
+        return
 
 root = Tk()
 root.title("STS")
