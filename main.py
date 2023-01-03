@@ -14,7 +14,6 @@ class voiceloop(threading.Thread):
 
         while True:
             voice = self.CollectVoice()
-
             if voice != False and myThread.rflag == True:
                 print(voice)
                 speak(voice)
@@ -73,15 +72,21 @@ def on_closing():
 
 def speak(text):
     tts = gTTS(text=text, lang='ko')
-    filename = './voice.mp3'
-    tts.save(filename)
-    playsound.playsound(filename)
-    if os.path.exists(filename):
-        os.remove(filename)
+    file_name = 'voice.mp3'
+    tts.save(file_name)
+    if os.path.exists(file_name):
+        try:
+            playsound.playsound(file_name)
+            os.remove(file_name)
+        except:
+            print("에러가 발생했습니다.")
+            pass
 
+
+speak("123123")
 
 root = Tk()
-root.title("Voice Collector")
+root.title("STS")
 root.geometry("200x200+50+50")
 
 mic1_img = PhotoImage(file="mic1.png")
@@ -89,7 +94,7 @@ mic2_img = PhotoImage(file="mic2.png")
 mic3_img = PhotoImage(file="mic3.png")
 
 img_frm = Label(root, image=mic2_img)
-img_frm.pack();
+img_frm.pack()
 
 myThread = voiceloop()
 myThread.rflag = True
