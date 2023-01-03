@@ -6,10 +6,8 @@ import speech_recognition as sr
 from gtts import gTTS
 import playsound
 
-
 class voiceloop(threading.Thread):
     mykeyboard = Controller()
-
     def run(self) -> None:
 
         while True:
@@ -36,18 +34,18 @@ class voiceloop(threading.Thread):
 
             try:
                 img_frm.config(image=mic3_img)
-                print("Adjusting")
-                listener.adjust_for_ambient_noise(raw_voice)
+                print("조정중...")
 
-                # adjust setting values
-                listener.dynamic_energy_adjustment_damping = 0.15
+                # 설정
+                listener.adjust_for_ambient_noise(raw_voice, 5)
+                listener.dynamic_energy_adjustment_damping = 0.2
                 listener.pause_threshold = 0.6
-                listener.energy_threshold = 600
+                listener.energy_threshold = 300
 
                 img_frm.config(image=mic1_img)
 
-                print("Say something!")
-                audio = listener.listen(raw_voice, 10, 5)
+                print("듣고 있습니다...")
+                audio = listener.listen(raw_voice)
 
                 img_frm.config(image=mic2_img)
 
@@ -57,7 +55,7 @@ class voiceloop(threading.Thread):
                 pass
 
             except sr.UnknownValueError:
-                print("could not understand audio")
+                print("이해할 수 없습니다.")
                 return False
 
             return str(voice_data)
@@ -81,9 +79,7 @@ def speak(text):
         except:
             print("에러가 발생했습니다.")
             pass
-
-
-speak("123123")
+    return
 
 root = Tk()
 root.title("STS")
