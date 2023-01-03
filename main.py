@@ -11,34 +11,34 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import asyncio
 
 type = 'Naver'
 
-base_url = 'https://papago.naver.com'
+base_url = 'https://papago.naver.com/?sk=ko'
 chrome_options = Options()  # 브라우저 꺼짐 방지
 chrome_options.add_experimental_option("detach", True)
 chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])  # 불필요한 에러 메세지 삭제
 chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-san블랙팬서는 와칸다 아무튼 그리고 정신감정을 받던 중 갑자기 갑자기 dbox")
+chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-
 driver.set_window_size(1920, 1080)
 driver.implicitly_wait(10)
 
 driver.get(base_url)
 
+mykeyboard = Controller()
 class voiceloop(threading.Thread):
-    mykeyboard = Controller()
+
     def run(self) -> None:
 
         while True:
-            voice = self.CollectVoice()
+            voice = asyncio.run(self.CollectVoice())
             if voice != False and myThread.rflag == True:
-                speak(voice)
-                self.Pasting(voice)
-
+                asyncio.run(speak(voice))
+                #self.Pasting(voice)
             if myThread.rflag == False:
                 break
 
@@ -47,7 +47,7 @@ class voiceloop(threading.Thread):
             self.mykeyboard.type(character)
         self.mykeyboard.type(" ")
 
-    def CollectVoice(self):
+    async def CollectVoice(self):
         # get microphone device on notebook or desk top
         listener = sr.Recognizer()
         voice_data = ""
@@ -59,18 +59,16 @@ class voiceloop(threading.Thread):
                 print("조정중...")
 
                 # 설정
-                listener.adjust_for_ambient_noise(raw_voice, 2)
+                # listener.adjust_for_ambient_noise(raw_voice, 2)
                 listener.dynamic_energy_adjustment_damping = 0.2
                 listener.pause_threshold = 0.8
                 listener.energy_threshold = 600
 
                 img_frm.config(image=mic1_img)
-
                 print("듣고 있습니다...")
                 audio = listener.listen(raw_voice)
-
+                print(raw_voice)
                 img_frm.config(image=mic2_img)
-
                 voice_data = listener.recognize_google(audio, language='ko')
 
             except UnboundLocalError:
@@ -80,7 +78,7 @@ class voiceloop(threading.Thread):
                 print("이해할 수 없습니다.")
                 return False
 
-            return str(voice_data)
+        return str(voice_data)
 
 
 def on_closing():
@@ -89,7 +87,7 @@ def on_closing():
     # myThread.join()
     os._exit(1)
 
-def speak(text):
+async def speak(text):
     if type == "Google":
         tts = gTTS(text=text, lang='ko')
         file_name = 'voice.mp3'
@@ -132,3 +130,4 @@ myThread.start()
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.wm_attributes("-topmost", 1)
 root.mainloop()
+
