@@ -12,8 +12,13 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import asyncio
+import configparser
 
-type = 'Naver'
+config = configparser.ConfigParser()
+config.read('config.ini')
+type = config['DEFAULT']['TYPE']
+
+print(type)
 
 base_url = 'https://papago.naver.com/?sk=ko'
 chrome_options = Options()  # 브라우저 꺼짐 방지
