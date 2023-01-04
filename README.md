@@ -13,3 +13,6 @@ TYPE = Python
 2. STS.exe 실행
 3. 마이크 아이콘이 초록색일때 블라블라 말하면 끝
 ## 본 프로그램을 절대 상업적으로 이용하지 마세요.
+
+## 크레딧
+본 프로그램은 [gadeokexp님의 VoiceTyper](https://github.com/gadeokexp/VoiceTyper)를 기반으로 만들어졌습니다.
