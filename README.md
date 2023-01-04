@@ -17,3 +17,8 @@ TYPE = Python
 
 ## 크레딧
 본 프로그램은 [gadeokexp님의 VoiceTyper](https://github.com/gadeokexp/VoiceTyper)를 기반으로 만들어졌습니다.
+
+
+## Todo
+TTS 학습모델 개발
+TTS 서버 개발
