@@ -13,13 +13,22 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import asyncio
 import configparser
+import pyttsx3
 
+#초기세팅
 config = configparser.ConfigParser()
 config.read('config.ini')
 type = config['DEFAULT']['TYPE']
 
-print(type)
+#현재 지정된 성우
+print("보이스 성우는 『" + type + "』타입 입니다.")
 
+#파이썬 TTS 세팅
+engine = pyttsx3.init()
+rate = engine.getProperty('rate')
+engine.setProperty('rate', rate-50)
+
+#PAPAGO TTS 세팅
 base_url = 'https://papago.naver.com/?sk=ko'
 chrome_options = Options()  # 브라우저 꺼짐 방지
 chrome_options.add_experimental_option("detach", True)
@@ -112,6 +121,10 @@ async def speak(text):
         time.sleep(1)
         driver.find_element(By.XPATH, '//*[@class="btn_sound___2H-0Z"]').click()
         time.sleep(3)
+        return
+    if type == "Python":
+        engine.say(text)
+        engine.runAndWait()
         return
     else:
         print("타입 설정이 이상합니다.")
