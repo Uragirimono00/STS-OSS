@@ -1,5 +1,6 @@
 ## pyttsx3 & GTTS & PAPAGO 및 SpeechRecongnition을 활용한 Speech To Speech
-컴퓨터에 연결된 기본 마이크가 존재하지 경우 프로그램이 정상적으로 실행되지 않을 수 있씁니다.
+컴퓨터에 연결된 기본 마이크가 존재하지 경우 프로그램이 정상적으로 실행되지 않을 수 있습니다.
+
 ## 설정
 config.ini
 ```
