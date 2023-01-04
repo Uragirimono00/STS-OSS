@@ -4,7 +4,7 @@
 ## 설정
 config.ini
 ```
-#Python(여자), Google(남자), Papago(여자)
+#Python(여자성우), Google(남자성우), Papago(여자성우)
 TYPE = Python
 ```
 디폴트는 Python입니다.
