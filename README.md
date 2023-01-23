@@ -20,5 +20,7 @@ TYPE = Python
 
 
 ## Todo
-TTS 학습모델 개발
 TTS 서버 개발
+
+## Complete
+TTS 학습모델 완료
